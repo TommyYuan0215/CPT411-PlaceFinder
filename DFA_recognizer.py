@@ -149,7 +149,7 @@ def show_DFA_output(text, dfa, matches, patterns_dict):
     if total_occurrences > 0:
         # Start of the table
         result_str += '''
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered">
             <thead class="table-light">
                 <tr>
                     <th style="text-align: center;">Pattern</th>
