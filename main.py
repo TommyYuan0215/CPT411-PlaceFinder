@@ -5,35 +5,35 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
+        print("Form submitted") # Debug log
         # Check if text comes from file upload or direct input
-        if 'text_file' in request.files and request.files['text_file'].filename != '':
+        if 'file' in request.files and request.files['file'].filename != '':
             # Get text from uploaded file
-            file = request.files['text_file']
+            file = request.files['file']
             try:
                 text = file.read().decode('utf-8')
+                print(f"File text: {text[:100]}") # Debug log
             except UnicodeDecodeError:
-                # Handle encoding errors
+                print("Encoding error") # Debug log
                 return render_template('index.html', error="File encoding not supported. Please use UTF-8 encoded text files.")
         else:
             # Get text from form input
-            text = request.form['patterns']
+            text = request.form['demotext']
+            print(f"Form text: {text[:100]}") # Debug log
         
         # Get patterns from form
         pattern_input = request.form['pattern']
+        print(f"Patterns: {pattern_input}") # Debug log
+        
         if pattern_input:
-            # Split the input by commas, strip spaces
             base_patterns = [p.strip() for p in pattern_input.split(',')]
-            # Limit to 15 patterns as mentioned in HTML form
             base_patterns = base_patterns[:15]
         else:
-            # If no patterns provided, use empty list
             base_patterns = []
 
-        # Create dictionary for pattern tracking
-        patterns_dict = {pattern.lower(): i for i, pattern in enumerate(base_patterns)}
-        
         # Process the text using the DFA_recognizer
         results = DFA_recognizer.process_text(text, base_patterns)
+        print(f"Results generated: {results[:100]}") # Debug log
 
         return render_template('result.html', results=results)
     

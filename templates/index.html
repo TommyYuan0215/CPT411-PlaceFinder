@@ -15,16 +15,16 @@
             <h2>DFA Place Finder Recognizer</h2>
         </div>
         <div class="card-body">
-            <form id="uploadForm" action="/" method="POST" enctype="multipart/form-data">
+            <form id="uploadForm" action="{{ url_for('index') }}" method="POST" enctype="multipart/form-data">
                 <div class="card my-3">
                     <!-- Step 1: File Upload or Demo Text Input Section -->
                     <div class="mb-4 px-3" id="fileInputSection">
                         <h5 class="text-primary py-2">Step 1: Upload a Text File or Write Demo Text</h5>
-                        <label for="text_file" class="form-label">Upload a text file</label>
-                        <input type="file" class="form-control" id="text_file" name="text_file" />
+                        <label for="file" class="form-label">Upload a text file</label>
+                        <input type="file" class="form-control" id="file" name="file" />
                         <h4 class="text-center my-3">OR</h4>
-                        <label for="patterns" class="form-label">Write your demo text here</label>
-                        <textarea class="form-control" name="patterns" rows="10" style="overflow-y: auto;"></textarea>
+                        <label for="demotext" class="form-label">Write your demo text here</label>
+                        <textarea class="form-control" name="demotext" rows="10" style="overflow-y: auto;"></textarea>
                     </div>
 
                     <hr>
@@ -57,10 +57,13 @@
         let isStep2Complete = false;
 
         // Check if the input method is complete (either file or demo text)
-        if (document.getElementById('text_file').disabled === false) {
-            isStep1Complete = document.getElementById('text_file').files.length > 0;
+        const fileInput = document.getElementById('file');
+        const textInput = document.querySelector('[name="demotext"]');
+        
+        if (!fileInput.disabled) {
+            isStep1Complete = fileInput.files.length > 0;
         } else {
-            isStep1Complete = document.querySelector('[name="patterns"]').value.trim() !== '';
+            isStep1Complete = textInput.value.trim() !== '';
         }
 
         // Check if the pattern input is complete
@@ -69,25 +72,27 @@
         // Enable/disable pattern input and Start Analysis button
         document.getElementById('pattern').disabled = !isStep1Complete;
         document.getElementById('startAnalysisBtn').disabled = !(isStep1Complete && isStep2Complete);
+        
+        console.log('Step1:', isStep1Complete, 'Step2:', isStep2Complete); // Debug log
     }
 
     // Event listeners for file and demo text inputs
-    document.getElementById('text_file').addEventListener('change', function() {
+    document.getElementById('file').addEventListener('change', function() {
         // If file is uploaded, disable the text input field
         if (this.files.length > 0) {
-            document.querySelector('[name="patterns"]').disabled = true;
+            document.querySelector('[name="demotext"]').disabled = true;
         } else {
-            document.querySelector('[name="patterns"]').disabled = false;
+            document.querySelector('[name="demotext"]').disabled = false;
         }
         checkStepCompletion();
     });
 
-    document.querySelector('[name="patterns"]').addEventListener('input', function() {
+    document.querySelector('[name="demotext"]').addEventListener('input', function() {
         // If demo text is entered, disable the file upload field
         if (this.value.trim() !== '') {
-            document.getElementById('text_file').disabled = true;
+            document.getElementById('file').disabled = true;
         } else {
-            document.getElementById('text_file').disabled = false;
+            document.getElementById('file').disabled = false;
         }
         checkStepCompletion();
     });
@@ -102,8 +107,8 @@
         // Reset the form
         document.getElementById('uploadForm').reset();
         // Reset the input sections
-        document.getElementById('text_file').disabled = false;
-        document.querySelector('[name="patterns"]').disabled = false;
+        document.getElementById('file').disabled = false;
+        document.querySelector('[name="demotext"]').disabled = false;
         document.getElementById('pattern').disabled = true;
         // Disable Start Analysis button
         document.getElementById('startAnalysisBtn').disabled = true;
