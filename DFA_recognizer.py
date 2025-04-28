@@ -130,34 +130,91 @@ class DFA:
     
 def show_DFA_output(text, dfa, matches, patterns_dict):
     result_str = ""
-    result_str += bolding_words("Text used for demo:", "title", -1) + "<br>"
-    result_str += text.replace("\n", "<br>") + "<br><br>"
-    result_str += bolding_words("Results:", "title", -1) + "<br>"
+    
+    # Text used for demo
+    result_str += '''
+        <div class="my-3">
+            <h4 class="text-primary">Text used for demo:</h4>
+        </div>
+        <div class="p-3 bg-light border rounded mb-4">
+            ''' + text.replace("\n", "<br>") + '''
+        </div>
+    '''
 
+    # Results section
+    result_str += '<div class="my-3"><h4 class="text-primary">Results:</h4></div>'
+    
     total_occurrences = sum(len(v) for v in matches.values())
 
     if total_occurrences > 0:
+        # Start of the table
+        result_str += '''
+        <table class="table table-bordered table-striped">
+            <thead class="table-light">
+                <tr>
+                    <th style="text-align: center;">Pattern</th>
+                    <th style="text-align: center;">Status</th>
+                    <th style="text-align: center;">Found</th>
+                    <th style="text-align: center;">Positions</th>
+                </tr>
+            </thead>
+            <tbody style="text-align: center;">
+        '''  # Added text-align center to tbody
+
         for pattern, positions in matches.items():
             display_pattern = pattern.capitalize() if pattern.islower() else pattern
-            result_str += bolding_words("Pattern:", "normal_bold", -1) + " " + bolding_words(display_pattern, "", -1) + "<br>"
+            num_positions = len(positions)
 
-            if len(positions) == 0:
-                result_str += bolding_words("Status:", "", -1) + " " + bolding_words("Reject", "error", -1) + "<br>"
-                result_str += bolding_words("Found:", "", -1) + " " + bolding_words(str(len(positions)), "normal_bold", -1) + "<br>"
+            if num_positions > 0:
+                # First row for this pattern
+                result_str += "<tr>"
+
+                # Merge Pattern, Status, and Found cells for the first position
+                result_str += f'<td rowspan="{num_positions}">{display_pattern}</td>'
+                result_str += f'<td class="text-success" rowspan="{num_positions}">Accept</td>'
+                result_str += f'<td rowspan="{num_positions}">{num_positions}</td>'
+
+                # Positions column (for the first position)
+                result_str += f'<td>({positions[0][0]}, {positions[0][1]})</td>'
+                result_str += "</tr>"
+
+                # Additional rows for other positions
+                for start, end in positions[1:]:
+                    result_str += "<tr>"
+                    result_str += f'<td>({start}, {end})</td>'  # Positions column
+                    result_str += "</tr>"
+
             else:
-                result_str += bolding_words("Status:", "", -1) + " " + bolding_words("Accept", "success", -1) + "<br>"
-                result_str += bolding_words("Found:", "", -1) + " " + bolding_words(str(len(positions)), "normal_bold", -1) + "<br>"
-                result_str += bolding_words("Positions:", "normal_bold", -1) + "<br>"
-                for start, end in positions:
-                    result_str += bolding_words(f"({start}, {end})", "", -1) + "<br>"
-            result_str += "<br>"
+                # No positions for this pattern, just show reject
+                result_str += "<tr>"
+                result_str += f'<td>{display_pattern}</td>'  # Single cell for Pattern
+                result_str += '<td class="text-danger">Reject</td>'
+                result_str += '<td class="text-muted">0</td>'
+                result_str += '<td>-</td>'
+                result_str += "</tr>"
 
-        result_str += bolding_words("Total occurrences:", "", -1) + " " + bolding_words(total_occurrences, "normal_bold", -1) + "<br><br>"
-        result_str += bolding_words("Visualization of patterns in the text:", "title", -1) + "<br>"
-        result_str += dfa.visualize_matches(text, matches, patterns_dict) + "<br>"
+        # Closing the table
+        result_str += '''
+            </tbody>
+        </table>
+        '''
 
+
+        # Total occurrences section
+        result_str += f'<div class="fw-bold">Total occurrences: <span class="text-info">{total_occurrences}</span></div>'
+        result_str += "<br><br>"
+
+        # Visualization of patterns
+        result_str += '''
+            <div class="my-3">
+                <h4 class="text-primary">Visualization of patterns in the text:</h4>
+            </div>
+            <div class="p-3 bg-light border rounded mb-4">
+                ''' + dfa.visualize_matches(text, matches, patterns_dict) + '''
+            </div>
+        '''
     else:
-        result_str += bolding_words("All patterns are not found in the given text.", "", -1)
+        result_str += '<div class="text-warning">All patterns are not found in the given text.</div>'
 
     return result_str
 

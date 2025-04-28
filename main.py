@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 import DFA_recognizer
+
 app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
