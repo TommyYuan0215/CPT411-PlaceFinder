@@ -30,7 +30,7 @@ def index():
             base_patterns = [p.strip() for p in pattern_input.split(',')]
             base_patterns = base_patterns[:15]
         else:
-            base_patterns = []
+            base_patterns = ["Malaysia", "Penang", "Australia", "Intel", "Pizza Hut", "New York", "Singapore", "Google", "London", "Johor", "KLCC", "Starbucks", "Cyberjaya", "Amazon", "Sunway"]
 
         # Process the text using the DFA_recognizer
         results = DFA_recognizer.process_text(text, base_patterns)

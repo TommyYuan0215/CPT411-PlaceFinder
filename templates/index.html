@@ -54,9 +54,8 @@
     // Function to check completion
     function checkStepCompletion() {
         let isStep1Complete = false;
-        let isStep2Complete = false;
-
-        // Check if the input method is complete (either file or demo text)
+    
+        // Step 2 is now optional, so we don't require it for enabling the Start button
         const fileInput = document.getElementById('file');
         const textInput = document.querySelector('[name="demotext"]');
         
@@ -65,27 +64,25 @@
         } else {
             isStep1Complete = textInput.value.trim() !== '';
         }
-
-        // Check if the pattern input is complete
-        isStep2Complete = document.getElementById('pattern').value.trim() !== '';
-
-        // Enable/disable pattern input and Start Analysis button
+    
+        // Enable/disable pattern input based on Step 1 only
         document.getElementById('pattern').disabled = !isStep1Complete;
-        document.getElementById('startAnalysisBtn').disabled = !(isStep1Complete && isStep2Complete);
-        
-        console.log('Step1:', isStep1Complete, 'Step2:', isStep2Complete); // Debug log
+    
+        // Enable Start Analysis button if Step 1 is completed
+        document.getElementById('startAnalysisBtn').disabled = !isStep1Complete;
+    
+        console.log('Step1:', isStep1Complete); // Debug log
     }
-
+    
     // Event listeners for file and demo text inputs
     document.getElementById('file').addEventListener('change', function() {
-        // If file is uploaded, disable the text input field
         if (this.files.length > 0) {
             document.querySelector('[name="demotext"]').disabled = true;
         } else {
             document.querySelector('[name="demotext"]').disabled = false;
         }
         checkStepCompletion();
-    });
+    });    
 
     document.querySelector('[name="demotext"]').addEventListener('input', function() {
         // If demo text is entered, disable the file upload field
