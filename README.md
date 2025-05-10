@@ -1,4 +1,6 @@
 # CPT411-PlaceFinder
+#### **Prepared By:** Peh Jia Jin (161059), Tan Jun Lin (160989), Thong Wai Hong (158876)
+
 ### Short Description:
 PlaceFinder DFA is a web-based Python application that implements a Deterministic Finite Automaton (DFA) to identify and extract place names from input text. Users can provide their own list of locations or use a default set of 15 predefined place names (e.g., Malaysia, Penang, Pizza Hut, New York).
 
