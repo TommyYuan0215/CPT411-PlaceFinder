@@ -13,21 +13,17 @@ def index():
             file = request.files['file']
             try:
                 text = file.read().decode('utf-8')
-                print(f"File text: {text[:100]}") # Debug log
             except UnicodeDecodeError:
-                print("Encoding error") # Debug log
                 return render_template('index.html', error="File encoding not supported. Please use UTF-8 encoded text files.")
         else:
             # Get text from form input
             text = request.form['demotext']
-            print(f"Form text: {text[:100]}") # Debug log
         
 
         base_patterns = ["Malaysia", "Penang", "Australia", "Intel", "Pizza Hut", "New York", "Singapore", "Google", "London", "Johor", "KLCC", "Starbucks", "Cyberjaya", "Amazon", "Sunway"]
 
         # Process the text using the DFA_recognizer
         results = DFA_recognizer.process_text(text, base_patterns)
-        print(f"Results generated: {results[:100]}") # Debug log
 
         return render_template('result.html', results=results)
     
