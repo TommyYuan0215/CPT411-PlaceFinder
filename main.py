@@ -22,15 +22,8 @@ def index():
             text = request.form['demotext']
             print(f"Form text: {text[:100]}") # Debug log
         
-        # Get patterns from form
-        pattern_input = request.form['pattern']
-        print(f"Patterns: {pattern_input}") # Debug log
-        
-        if pattern_input:
-            base_patterns = [p.strip() for p in pattern_input.split(',')]
-            base_patterns = base_patterns[:15]
-        else:
-            base_patterns = ["Malaysia", "Penang", "Australia", "Intel", "Pizza Hut", "New York", "Singapore", "Google", "London", "Johor", "KLCC", "Starbucks", "Cyberjaya", "Amazon", "Sunway"]
+
+        base_patterns = ["Malaysia", "Penang", "Australia", "Intel", "Pizza Hut", "New York", "Singapore", "Google", "London", "Johor", "KLCC", "Starbucks", "Cyberjaya", "Amazon", "Sunway"]
 
         # Process the text using the DFA_recognizer
         results = DFA_recognizer.process_text(text, base_patterns)

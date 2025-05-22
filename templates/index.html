@@ -17,23 +17,12 @@
         <div class="card-body">
             <form id="uploadForm" action="{{ url_for('index') }}" method="POST" enctype="multipart/form-data">
                 <div class="card my-3">
-                    <!-- Step 1: File Upload or Demo Text Input Section -->
-                    <div class="mb-4 px-3" id="fileInputSection">
-                        <h5 class="text-primary py-2">Step 1: Upload a Text File or Write Demo Text</h5>
+                    <div class="mb-4 px-3 py-3" id="fileInputSection">
                         <label for="file" class="form-label">Upload a text file</label>
                         <input type="file" class="form-control" id="file" name="file" />
                         <h4 class="text-center my-3">OR</h4>
                         <label for="demotext" class="form-label">Write your demo text here</label>
                         <textarea class="form-control" name="demotext" rows="10" style="overflow-y: auto;"></textarea>
-                    </div>
-
-                    <hr>
-
-                    <!-- Step 2: Pattern Input Section -->
-                    <div class="mb-4 px-3">
-                        <h5 class="text-primary py-2">Step 2: Input Pattern</h5>
-                        <label for="pattern" class="form-label">Input Pattern here (comma separated, max 15)</label>
-                        <input type="text" class="form-control" name="pattern" id="pattern" placeholder="e.g Malaysia, Intel etc" disabled />
                     </div>
                 </div>
                 <!-- Button Group (Start Analysis & Clear All) -->
@@ -42,6 +31,13 @@
                     <button type="button" class="btn btn-danger form-control" id="clearAllBtn" onclick="confirm('Are you sure you want to clear all input? Unsaved data will be wiped.')">Clear All</button>
                 </div>
             </form>
+        </div>
+        <div class="card-footer">
+            <div class="card ps-3 py-1">
+                <b>This application detects only according to the default pattern: </b>
+                <p>"Malaysia", "Penang", "Australia", "Intel", "Pizza Hut", "New York", "Singapore", "Google", "London", "Johor", "KLCC", 
+                    "Starbucks", "Cyberjaya", "Amazon", "Sunway"</h4>
+            </div>
         </div>
     </div>
 </div>
@@ -65,13 +61,8 @@
             isStep1Complete = textInput.value.trim() !== '';
         }
     
-        // Enable/disable pattern input based on Step 1 only
-        document.getElementById('pattern').disabled = !isStep1Complete;
-    
         // Enable Start Analysis button if Step 1 is completed
         document.getElementById('startAnalysisBtn').disabled = !isStep1Complete;
-    
-        console.log('Step1:', isStep1Complete); // Debug log
     }
     
     // Event listeners for file and demo text inputs
@@ -91,11 +82,6 @@
         } else {
             document.getElementById('file').disabled = false;
         }
-        checkStepCompletion();
-    });
-
-    // Event listener for the pattern input field
-    document.getElementById('pattern').addEventListener('input', function() {
         checkStepCompletion();
     });
 
